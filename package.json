@@ -1,0 +1,42 @@
+{
+  "name": "alac_player",
+  "version": "1.4.1",
+  "productName": "Alac Player",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "electron src/index.js",
+    "build": "electron-packager . Alac-Player --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/favicon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Alac Player\"",
+    "build-64": "electron-packager . Alac-Player --overwrite --asar=true --platform=win32 --arch=x64 --icon=assets/icons/win/favicon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Alac Player\"",
+    "prd": "node build.js"
+  },
+  "keywords": [],
+  "author": "Luis Toledo P.",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "electron-forge": "^5.2.4",
+    "electron-is-dev": "^1.2.0",
+    "electron-reload": "^1.5.0",
+    "electron-store": "^5.2.0",
+    "pretty-ms": "^7.0.1",
+    "socket.io-client": "^2.3.0",
+    "winston": "^3.3.3"
+  },
+  "build": {
+    "appId": "pe.alacoutdoor.alacplayer",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
+  },
+  "devDependencies": {
+    "electron": "^11.2.0",
+    "electron-builder": "^22.8.1",
+    "electron-packager": "^14.2.1",
+    "electron-wix-msi": "^2.2.0"
+  }
+}
