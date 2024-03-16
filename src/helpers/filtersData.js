@@ -91,7 +91,6 @@ exports.searchDataVideo = async () => {
     verify_position = await validateNoRepit(pColumn, dataMedia.mediaId)
     try {
         verify_position;
-        //console.log("verify_position",verify_position)
     } catch (error) {
         //console.error(error);
         // expected output: ReferenceError: nonExistentFunction is not defined
@@ -110,7 +109,6 @@ exports.searchDataVideo = async () => {
         }
 
         pColumn = parseInt(JSON.parse(localStorage.getItem('pColumn')))
-        // console.log(pRow, pColumn)
         dataMedia = await searchData(pRow, pColumn)
         validate = await validateHour(dataMedia)
         if (!entra) {
@@ -127,7 +125,6 @@ exports.searchDataVideo = async () => {
 
         if (countValidate >= maxRows) {
             initNumber++
-            // console.log(initNumber)
             if (initNumber > (maxRows * 2)) {
                 entra = true
                 const pRowActual = parseInt(JSON.parse(localStorage.getItem('pRowActual')));
@@ -156,7 +153,6 @@ exports.searchDataVideo = async () => {
                     break;
                 }
             } else {
-                // console.log("salto 2")
                 validate_RepitSame = await validateRepitSame(dataMedia.categoryContentsID)
                 if (validate_RepitSame) {
                     entra = true;
@@ -164,7 +160,6 @@ exports.searchDataVideo = async () => {
                     localStorage.setItem("pRow", JSON.stringify(pRowActual));
                     await setColumnStorage(pColumn);
                 } else {
-                    // console.log('aquii')
                     entra = true
                     verify_position = true
                     global_played = true
@@ -174,8 +169,6 @@ exports.searchDataVideo = async () => {
                         break;
                     }
                 }
-                // console.log("antes: ", validate_RepitSame)
-                // console.log("salto 2")
                 // await setColumnStorage(pColumn)
             }
 
@@ -195,8 +188,6 @@ exports.searchDataVideo = async () => {
             }
         }
     }
-
-    // console.log(dataMedia.mediaId)
 
     id = JSON.parse(localStorage.getItem('idPanel'))
 
@@ -272,7 +263,6 @@ async function setColumnStorage(pColumn) {
         localStorage.setItem("pColumn", JSON.stringify(pColumn + 1))
     }
     // const pRowActual = parseInt(JSON.parse(localStorage.getItem('pRowActual')));
-    // console.log(pRowActual)
     // localStorage.setItem("pRow", JSON.stringify(pRowActual))
 }
 
@@ -308,14 +298,12 @@ async function setStorage(pRow, pColumn) {
 }
 
 async function searchData(pRow, pColumn) {
-    // console.log(pRow, pColumn)
     let data = JSON.parse(localStorage.getItem('JSONProgram')),
         dataMedia;
 
     for (let i = 0; i < data.length; i++) {
         let e = data[pColumn][pRow]
         if (e) {
-            // console.log('dataa:',e)
             dataMedia = e
             break
         }
@@ -362,11 +350,9 @@ async function validateNoRepit(pColumn, mediaId) {
                 return true;
             }
         } else {
-            console.log("ingresando correccion1")
             main.reloadReset()
         }
     } else {
-        console.log("ingresando correccion2")
         main.reloadReset()
     }
 

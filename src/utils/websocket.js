@@ -20,19 +20,15 @@ exports.checkStatus = async (id) => {
     if (id) {
       const data = { id };
       socket.emit("client:identificado", data);
-      // console.log('socket identificado', socket.id)
       localStorage.setItem("SocketID", JSON.stringify(idSocket));
       return (socketStatus = true);
     } else {
-      // console.log('Conectado al servidor', socket.id)
       return (socketStatus = true);
     }
   });
 
   socket.on("disconnect", () => {
-    // console.log('Desconectado del servidor', idSocket);
     socketStatus = false;
-    // console.log(socketStatus)
     return socketStatus;
   });
   // return socketStatus
@@ -62,10 +58,8 @@ const resetPlayerSocket = () => {
       { idPlaylist } = data;
 
     if (idPlaylist == parseInt(id)) {
-      console.log("reset")
       validateContinue(option)
     } else {
-      console.log("reset failed")
       statusRestSocket(false, "reset failed");
     }
   });
@@ -176,7 +170,6 @@ exports.getSocketID = () => idSocket;
 
 const addMediaPlaylist = () => {
   socket.on("add:media:playlist:player", async (data) => {
-    console.log("data",data, 1)
     await downloadContents(data, 1)
   });
   
@@ -272,22 +265,16 @@ async function downloadContents(data, opt, sync = false, aDataPlaylistSync = {})
               const status_sync = respPanelSync.data[0].status_sync;
               statusSyncPanels.push(status_sync);
             } else {
-              //console.log('Log: ', 'Error en la línea 239', respPanelSync);
             }
           }
 
           const descriptionSync = "Sincronización terminado";
-          //console.log(description);
           await http.updatePanelSync(idPlaylist);
 
           const aStatusCero = statusSyncPanels.filter(e => e === '0');
-          console.log(aStatusCero);
           if (aStatusCero.length === 0) {
-            console.log('Terminó la sincronización');
             proceedPlayMovie(intervalId, response, idPlaylist, descriptionSync, opt);
           }
-          console.log('-------------------------------');
-          //console.log("termino",verifi);
           //alert('Entra a sincronizar');
           //await updataData(response, idPlaylist, description, opt);
           //clearInterval(intervalId);
@@ -331,8 +318,6 @@ async function resetdownloadDataMedia(sync = false, aDataPlaylistSync = {}) {
 
 
 async function updataData(resp, id, description, opt) {
-
-  console.log(resp, id, description, opt)
   if (opt == 2) {
     localStorage.setItem('demon', JSON.stringify(true))
   }

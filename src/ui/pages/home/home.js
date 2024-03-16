@@ -62,9 +62,7 @@ async function home() {
 
     var intervalLoanding = setInterval(async () => {
         let statusConnet = await http.getStatusExport()
-        // console.log("conectanse...")
         if (statusConnet) {
-            // console.log("ya tiene internet")
             clearInterval(intervalLoanding);
             setTimeout(() => {
                 loadData()
@@ -135,7 +133,6 @@ async function home() {
                 } else {
                     loading.innerHTML += `<div class="loading">Loading&#8230;</div>`;
                     document.getElementById('download').disabled = true;
-                    // console.log("Ruta final", pathSelect.value)
                     const resp = await main.downloadFiles(id, pathSelect.value, null)
                     if (resp.status) {
                         // let json = ""
@@ -183,7 +180,6 @@ exports.restHome = async () => {
 }
 
 async function player(data, basepath, option) {
-    // console.log("ENTRANDO A PLAYER")
     localStorage.setItem('ruta', JSON.stringify('player'))
     document.body.innerHTML = ""
     document.body.innerHTML += `
@@ -512,7 +508,6 @@ async function player(data, basepath, option) {
             }
 
         } catch (error) {
-            // console.log(error)
         }
     }
 
@@ -521,12 +516,10 @@ async function player(data, basepath, option) {
         try {
             let time = parseInt(dataHml.duration),
                 html = ""
-            //console.log("duracion", dataHml.duration)
             html = fs.readFileSync(`${mediaPlay}`, 'utf8');
             divHtml.innerHTML = ""
             divHtml.innerHTML = html
             time = time + 2
-            //console.log("divHtml", divHtml)
 
             setTimeout(() => {
                 let timeIntervalId = setInterval(async () => {
@@ -673,7 +666,6 @@ exports.demon = async () => {
 
 exports.demon2 = () => {
     // Lógica de la función demon
-    console.log('Función demon ejecutada desde home.js');
   };
 
 async function initStart() {

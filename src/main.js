@@ -167,7 +167,6 @@ async function downloadFiles(id, path, basePath) {
         let listVideos = [], listProgram = []
         // if(basePath){
         //     listVideos = await FILTER.filterVideos(respuesta['data'], basePath)
-        //     console.log(listVideos)
         // }else{
         //     listVideos = respuesta.data
         // }
@@ -223,7 +222,6 @@ async function downloadFiles(id, path, basePath) {
 
     } catch (error) {
         continuee = true
-        //console.log(error);
         const err = {
             status: false,
             err: error,
@@ -258,7 +256,6 @@ async function download(listVideos, path, jsonData, jsonPath) {
                     progressAndValidate()
                 })
             }).catch(function (error) {
-                console.log(error.message)
                 file.close()
                 const newUrl = error.config.url;
                 const newfile = fs.createWriteStream(downloadPath)
@@ -299,13 +296,11 @@ async function download(listVideos, path, jsonData, jsonPath) {
                         fileR.close(cb(true))
                     })
                 }).catch(function (err) {
-                    // console.log(err)
                     cb(false)
                 })
             }
         }
     } catch (error) {
-        //console.log(error)
     }
 
 }
@@ -371,7 +366,6 @@ async function downloadSockets(p_path, data, jsonNew, option) {
             return resp
         }
     } catch (error) {
-        // console.log(error)
         const resp = {
             status: false,
             err: error,
@@ -398,7 +392,6 @@ async function listVideos() {
             return videos
         }
     } catch (error) {
-        // console.log(error)
     }
 
 }
@@ -408,7 +401,6 @@ async function fileExists(pathVideo) {
         if (fs.existsSync(pathVideo)) return true
         return false
     } catch (error) {
-        // console.log(error)
         return false
     }
 }
@@ -446,7 +438,6 @@ async function validateData() {
                 }
                 return resp
             } else {
-                // console.log("entrando que no hay videos")
                 return false
             }
         }
@@ -471,7 +462,6 @@ async function demonReset() {
     // let contado = 1
     let intervalId = setInterval(async () => {
         const reset = await resetProgram()
-        // console.log("reset", contado++)
         if (reset) {
             update = false
             continuee = false
@@ -505,7 +495,6 @@ async function resetProgram() {
                 const p = Path.resolve(dir, file);
                 const stat = await lstat(p);
                 if (stat.isDirectory()) {
-                    // console.log("Entro aqui")
                     proms = await resetProgram(p);
                     if (proms) return resp
                 } else {
