@@ -1,7 +1,7 @@
 const json = require('../../package.json')
-const ENV = 'DEV'
+//const ENV = 'DEV'
 //const ENV = 'QA'
-//const ENV = 'PRD'
+const ENV = 'PRD'
 
 let _urlBase = 'http://localhost:3000'
 let _urlStorage = 'https://storage.googleapis.com';
