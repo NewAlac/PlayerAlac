@@ -1,6 +1,6 @@
 {
   "name": "alac_player",
-  "version": "1.4.3",
+  "version": "1.4.2",
   "productName": "Alac Player",
   "description": "",
   "main": "src/index.js",
@@ -29,6 +29,14 @@
     "files": [
       "build/**/*",
       "node_modules/**/*"
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "NewAlac",
+        "repo": "PlayerAlac",
+        "private": false
+      }
     ],
     "directories": {
       "buildResources": "assets"
