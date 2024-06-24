@@ -354,7 +354,7 @@ async function player(data, basepath, option) {
                             </div>
                         </div>
                     </div>
-
+                    <button id="freezeButton">Freeze App</button>
                     <div class="content-video">
                         <video id="reproductor" autoplay="true"></video>
                         <div id="divHtml" class="hide"></div>                  
@@ -428,9 +428,13 @@ async function player(data, basepath, option) {
         }, 2000);
     }
 
-
-
-
+    document.getElementById('freezeButton').addEventListener('click', () => {
+        // Simulate a long-running process
+        let now = Date.now();
+        while (Date.now() - now < 40000) {  // 10 seconds
+            // Busy wait to simulate the app being non-responsive
+        }
+    });
 
     eliminarElemento.addEventListener('click', (e) => {
         e.preventDefault()
@@ -486,7 +490,6 @@ async function player(data, basepath, option) {
         if (dataMedia.media_type != 'html') {
             data.playerId = dataMedia.playlistId
             data.nameVideo = dataMedia.content_name
-            await http.addNetworking(data)
             playStart(mediaPlay)
         } else {
             loadingHtml(dataMedia, mediaPlay, media)

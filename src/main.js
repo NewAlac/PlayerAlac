@@ -64,7 +64,20 @@ async function createWindow() {
         mainWindow.webContents.openDevTools();
     }
 
+    // Watchdog Interval
+    let lastPing = Date.now();
 
+    mainWindow.webContents.on('dom-ready', () => {
+        lastPing = Date.now();
+    });
+
+    setInterval(() => {
+        console.log(Date.now() - lastPing)
+        if (Date.now() - lastPing > 10000) { // 10 seconds
+            console.log('La ventana se ha vuelto no responsiva. Recargando...');
+            mainWindow.reload();
+        }
+    }, 5000);
     // mainWindow.setMenu()
 
     mainWindow.on('close', async (e) => {
