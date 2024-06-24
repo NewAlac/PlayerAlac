@@ -1,6 +1,6 @@
 {
   "name": "alac_player",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "productName": "Alac Player",
   "description": "",
   "main": "src/index.js",
