@@ -1,17 +1,18 @@
-const { createWindow } = require('./main')
-const { app, Tray, Menu, BrowserWindow, dialog, ipcMain  } = require('electron')
-const path = require('path')
-const gotTheLock = app.requestSingleInstanceLock();
-const customWindow = {};
-require('electron-reload')(__dirname);
-
-const main = require("./main");
+const { app, Tray, Menu, dialog } = require('electron');
+const path = require('path');
+const { autoUpdater } = require('electron-updater'); // Importa autoUpdater desde electron-updater
+const main = require('./main'); // Ajusta la ruta según la ubicación real de tu archivo main
 
 let tray = null;
 let interval1, interval2;
 
+// Configuración de electron-reload
+require('electron-reload')(__dirname, {
+    electron: path.join(__dirname, 'node_modules', '.bin', 'electron')
+});
 
-app.whenReady().then(() => {
+// Función para crear y configurar la bandeja y el menú contextual
+function createTrayAndContextMenu() {
     tray = new Tray(path.join(__dirname, '../favicon.ico'));
 
     const subMenu = [
@@ -59,33 +60,26 @@ app.whenReady().then(() => {
     function updateContextMenu(selectedOption = null) {
         const updatedSubMenu = subMenu.map((item) => {
             const newItem = { ...item };
-            if (item.label === selectedOption) {
-                newItem.checked = true;
-            } else {
-                newItem.checked = false;
-            }
+            newItem.checked = (item.label === selectedOption);
             return newItem;
         });
         const updatedContextMenu = Menu.buildFromTemplate([
-            { label: 'Opciones', type: 'submenu', submenu: updatedSubMenu },
+            { label: 'Update Player Interval', type: 'submenu', submenu: updatedSubMenu },
             { type: 'separator' },
             { label: 'Salir', type: 'normal', click: () => app.quit() }
         ]);
         tray.setContextMenu(updatedContextMenu);
     }
-});
+}
 
+// Configuración de la aplicación
+app.allowRendererProcessReuse = false;
 
-customWindow.close = function () {
-    console.log('Cerrando ventana...');
-};
-
-app.allowRendererProcessReuse = false
-
+const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
     app.quit();
 } else {
-    app.on('second-instance', (event, commandLine, workingDirectory) => {
+    app.on('second-instance', () => {
         dialog.showMessageBox({
             type: 'info',
             title: 'Aplicativo ya está abierto',
@@ -93,5 +87,40 @@ if (!gotTheLock) {
         });
     });
 
-    app.whenReady().then(createWindow)
+    app.whenReady().then(() => {
+        createTrayAndContextMenu();
+        main.createWindow(); // Aquí se llama a createWindow desde el módulo main
+
+        // Configuración de actualización automática
+        autoUpdater.checkForUpdatesAndNotify(); // Comprueba actualizaciones y notifica al usuario
+
+        // Manejo de eventos de actualización
+        autoUpdater.on('update-available', () => {
+            dialog.showMessageBox({
+                type: 'info',
+                title: 'Actualización disponible',
+                message: 'Una nueva versión de la aplicación está disponible. ¿Desea actualizar ahora?',
+                buttons: ['Actualizar', 'Cancelar']
+            }).then(({ response }) => {
+                if (response === 0) {
+                    autoUpdater.downloadUpdate(); // Descarga la actualización si el usuario decide actualizar
+                }
+            });
+        });
+
+        autoUpdater.on('update-downloaded', () => {
+            dialog.showMessageBox({
+                type: 'info',
+                title: 'Actualización descargada',
+                message: 'La actualización se ha descargado completamente. La aplicación se cerrará para aplicar los cambios.',
+                buttons: ['Aceptar']
+            }).then(() => {
+                autoUpdater.quitAndInstall(); // Instala la actualización y reinicia la aplicación
+            });
+        });
+
+        autoUpdater.on('error', (error) => {
+            console.error('Error de actualización:', error.message);
+        });
+    });
 }

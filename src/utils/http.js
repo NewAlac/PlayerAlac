@@ -1,105 +1,113 @@
 const env = require("./env");
 const axios = require("axios");
-const dns = require("dns");
 
 let status = false;
 
 async function validateConnect() {
-  return navigator.onLine ? status = true : status = false;
+  try {
+    status = navigator.onLine;
+    return status;
+  } catch (error) {
+    console.error('Error validating connection:', error.message);
+    return false;
+  }
 }
 
 exports.getStatusExport = async () => {
-  await validateConnect()
-  return status
+  try {
+    await validateConnect();
+    return status;
+  } catch (error) {
+    console.error('Error getting status export:', error.message);
+    return false;
+  }
 }
 
 exports.getPlaylist = async () => {
   try {
-    // const url = `${env.urlBase}/playlist`;
     const res = await axios.get(`${env.urlBase}/playlist`);
     return res.data.data;
   } catch (error) {
-    const respon = {
+    console.error('Error getting playlist:', error.message);
+    return {
       status: "error",
       message: error.message,
     };
-    return respon;
   }
 }
 
 exports.downloadVideosPlaylist = async (id) => {
   try {
-    // const url = `${env.urlBase}/playlist/download/${id}`;
     const res = await axios.get(`${env.urlBase}/playlist/download/${id}`);
-    let playlist = res.data;
-    return playlist;
+    return res.data;
   } catch (error) {
-    console.log(error);
-    const respon = {
-      status: false,
+    console.error('Error downloading videos playlist:', error.message);
+    return {
+      status: "error",
       message: error.message,
     };
-    return respon;
   }
-
-};
+}
 
 exports.createReport = async (data) => {
   try {
-    await axios.post(`${env.urlReport}/create`, data)
-  } catch (error) { }
+    await axios.post(`${env.urlReport}/create`, data);
+  } catch (error) {
+    console.error('Error creating report:', error.message);
+  }
 }
 
 exports.addNetworking = async (data) => {
   try {
-    await axios.post(`${env.urlBase}/player/newadd`, data)
-  } catch (error) { }
+    await axios.post(`${env.urlBase}/player/newadd`, data);
+  } catch (error) {
+    console.error('Error adding networking:', error.message);
+  }
 }
 
 exports.questionsPanelSync = async (id) => {
   try {
     const res = await axios.get(`${env.urlBase}/sync/question/${id}`);
-    let playlist = res.data;
-    return playlist;
+    return res.data;
   } catch (error) {
-    const respon = {
-      status: false,
+    console.error('Error syncing questions panel:', error.message);
+    return {
+      status: "error",
       message: error.message,
     };
-    return respon;
   }
 }
 
 exports.updatePanelSync = async (id) => {
   try {
     const res = await axios.put(`${env.urlBase}/sync/updatePanel/${id}`);
-    let playlist = res.data;
-    return playlist;
+    return res.data;
   } catch (error) {
-    const respon = {
-      status: false,
+    console.error('Error updating panel sync:', error.message);
+    return {
+      status: "error",
       message: error.message,
     };
-    return respon;
   }
 }
 
 exports.postAllDataReport = async (data) => {
   try {
-    await axios.post(`${env.urlScreen}/api/video`, data)
-  } catch (error) { }
+    await axios.post(`${env.urlScreen}/api/video`, data);
+  } catch (error) {
+    console.error('Error posting all data report:', error.message);
+  }
 }
 
 exports.getMediaContent = async (id) => {
   try {
-    // const url = `${env.urlBase}/playlist`;
     const res = await axios.get(`${env.urlBase}/player/searchid/${id}`);
     return res.data;
   } catch (error) {
-    const respon = {
+    console.error('Error getting media content:', error.message);
+    return {
       status: "error",
       message: error.message,
     };
-    return respon;
   }
 }

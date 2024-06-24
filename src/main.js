@@ -44,6 +44,14 @@ async function createWindow() {
             enableRemoteModule: true,
             contextIsolation: false,
             webSecurity: true,
+            // Configurar la CSP aquí
+            contentSecurityPolicy: {
+                directives: {
+                    defaultSrc: ["'self'"],
+                    scriptSrc: ["'self'", "https://cdnjs.cloudflare.com"],
+                    // Añade más directivas según sea necesario
+                }
+            }
         },
         x: XX,
         y: YY,
@@ -63,8 +71,7 @@ async function createWindow() {
     if (isDev) {
         mainWindow.webContents.openDevTools();
     }
-
-
+    
     // mainWindow.setMenu()
 
     mainWindow.on('close', async (e) => {
@@ -75,17 +82,9 @@ async function createWindow() {
                 title: 'Confirmar',
                 message: '¿Estás seguro de que quiere cerrar el programa?',
                 buttons: ['No', 'Yes'],
-            })
+            });
             if (choice.response === 1) {
-                // if (isDev) {
-                //     store.delete('positioX');
-                //     store.delete('positioY');
-                //     store.delete('width');
-                //     store.delete('height');
-                // }
-                process.exit()
-                //forceQuit = true;
-                //mainWindow.close();
+                process.exit();
             }
         }
     });
